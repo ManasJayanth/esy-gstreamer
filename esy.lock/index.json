@@ -1,0 +1,109 @@
+{
+  "checksum": "b6487ef2ac4e8876119622583edd2d96",
+  "root": "hello-reason@link:./package.json",
+  "node": {
+    "pkg-config@archive:https://pkg-config.freedesktop.org/releases/pkg-config-0.29.tar.gz#sha1:f4b19d203b3896a4293af4b62c7f908063c88a5a@fbed7be2": {
+      "id":
+        "pkg-config@archive:https://pkg-config.freedesktop.org/releases/pkg-config-0.29.tar.gz#sha1:f4b19d203b3896a4293af4b62c7f908063c88a5a@fbed7be2",
+      "name": "pkg-config",
+      "version":
+        "archive:https://pkg-config.freedesktop.org/releases/pkg-config-0.29.tar.gz#sha1:f4b19d203b3896a4293af4b62c7f908063c88a5a",
+      "source": {
+        "type": "install",
+        "source": [
+          "archive:https://pkg-config.freedesktop.org/releases/pkg-config-0.29.tar.gz#sha1:f4b19d203b3896a4293af4b62c7f908063c88a5a"
+        ]
+      },
+      "overrides": [
+        {
+          "buildsInSource": true,
+          "build": [ "./configure --prefix #{self.install}", "make" ],
+          "install": [ "make install" ]
+        }
+      ],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    "ninja@archive:https://github.com/ninja-build/ninja/archive/v1.8.2.tar.gz#sha1:17219deb34dd816363e37470f77ff7231509143a@0433f6d2": {
+      "id":
+        "ninja@archive:https://github.com/ninja-build/ninja/archive/v1.8.2.tar.gz#sha1:17219deb34dd816363e37470f77ff7231509143a@0433f6d2",
+      "name": "ninja",
+      "version":
+        "archive:https://github.com/ninja-build/ninja/archive/v1.8.2.tar.gz#sha1:17219deb34dd816363e37470f77ff7231509143a",
+      "source": {
+        "type": "install",
+        "source": [
+          "archive:https://github.com/ninja-build/ninja/archive/v1.8.2.tar.gz#sha1:17219deb34dd816363e37470f77ff7231509143a"
+        ]
+      },
+      "overrides": [
+        {
+          "buildsInSource": true,
+          "build": [ "./configure.py --bootstrap" ],
+          "install": []
+        }
+      ],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    "meson@archive:https://github.com/mesonbuild/meson/releases/download/0.49.0/meson-0.49.0.tar.gz#sha1:27cdbbe2e49a21d256848cf6a9082770094f0bf9@14f023c9": {
+      "id":
+        "meson@archive:https://github.com/mesonbuild/meson/releases/download/0.49.0/meson-0.49.0.tar.gz#sha1:27cdbbe2e49a21d256848cf6a9082770094f0bf9@14f023c9",
+      "name": "meson",
+      "version":
+        "archive:https://github.com/mesonbuild/meson/releases/download/0.49.0/meson-0.49.0.tar.gz#sha1:27cdbbe2e49a21d256848cf6a9082770094f0bf9",
+      "source": {
+        "type": "install",
+        "source": [
+          "archive:https://github.com/mesonbuild/meson/releases/download/0.49.0/meson-0.49.0.tar.gz#sha1:27cdbbe2e49a21d256848cf6a9082770094f0bf9"
+        ]
+      },
+      "overrides": [ { "buildsInSource": true } ],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    "hello-reason@link:./package.json": {
+      "id": "hello-reason@link:./package.json",
+      "name": "hello-reason",
+      "version": "link:./package.json",
+      "source": { "type": "link", "path": ".", "manifest": "package.json" },
+      "overrides": [],
+      "dependencies": [
+        "pkg-config@archive:https://pkg-config.freedesktop.org/releases/pkg-config-0.29.tar.gz#sha1:f4b19d203b3896a4293af4b62c7f908063c88a5a@fbed7be2",
+        "gstreamer@archive:https://github.com/GStreamer/gstreamer/archive/1.14.4.tar.gz#sha1:d7ee74ac20bfe5f9e1bda36418eb4df9c924f1e7@937ae70e"
+      ],
+      "devDependencies": []
+    },
+    "gstreamer@archive:https://github.com/GStreamer/gstreamer/archive/1.14.4.tar.gz#sha1:d7ee74ac20bfe5f9e1bda36418eb4df9c924f1e7@937ae70e": {
+      "id":
+        "gstreamer@archive:https://github.com/GStreamer/gstreamer/archive/1.14.4.tar.gz#sha1:d7ee74ac20bfe5f9e1bda36418eb4df9c924f1e7@937ae70e",
+      "name": "gstreamer",
+      "version":
+        "archive:https://github.com/GStreamer/gstreamer/archive/1.14.4.tar.gz#sha1:d7ee74ac20bfe5f9e1bda36418eb4df9c924f1e7",
+      "source": {
+        "type": "install",
+        "source": [
+          "archive:https://github.com/GStreamer/gstreamer/archive/1.14.4.tar.gz#sha1:d7ee74ac20bfe5f9e1bda36418eb4df9c924f1e7"
+        ]
+      },
+      "overrides": [
+        {
+          "dependencies": { "meson": "*", "ninja": "*" },
+          "buildsInSource": true,
+          "build": [
+            "python #{ meson.root / 'meson.py'} setup --prefix #{self.install} _builddir"
+          ],
+          "install": [
+            "#{ninja.root / 'ninja' } -C _builddir",
+            "python #{ meson.root / 'meson.py'} install -C _builddir"
+          ]
+        }
+      ],
+      "dependencies": [
+        "ninja@archive:https://github.com/ninja-build/ninja/archive/v1.8.2.tar.gz#sha1:17219deb34dd816363e37470f77ff7231509143a@0433f6d2",
+        "meson@archive:https://github.com/mesonbuild/meson/releases/download/0.49.0/meson-0.49.0.tar.gz#sha1:27cdbbe2e49a21d256848cf6a9082770094f0bf9@14f023c9"
+      ],
+      "devDependencies": []
+    }
+  }
+}

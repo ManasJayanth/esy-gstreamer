@@ -1,0 +1,64 @@
+{
+  "name": "hello-reason",
+  "version": "0.1.0",
+  "description": "sy Project",
+  "license": "MIT",
+  "esy": {
+    "build": "pkg-config --libs gstreamer-1.0"
+  },
+  "buildEnv": {
+    "PKG_CONFIG_PATH": "#{gstreamer.lib / 'pkgconfig'}"
+  },
+  "dependencies": {
+    "pkg-config": "*",
+    "gstreamer": "*"
+  },
+  "resolutions": {
+    "ninja": {
+      "source": "https://github.com/ninja-build/ninja/archive/v1.8.2.tar.gz#17219deb34dd816363e37470f77ff7231509143a",
+      "override": {
+        "buildsInSource": true,
+        "build": [
+          "./configure.py --bootstrap"
+        ],
+        "install": []
+      }
+    },
+    "meson": {
+      "source": "https://github.com/mesonbuild/meson/releases/download/0.49.0/meson-0.49.0.tar.gz#27cdbbe2e49a21d256848cf6a9082770094f0bf9",
+      "override": {
+        "buildsInSource": true
+      }
+    },
+    "gstreamer": {
+      "source": "https://github.com/GStreamer/gstreamer/archive/1.14.4.tar.gz#d7ee74ac20bfe5f9e1bda36418eb4df9c924f1e7",
+      "override": {
+        "dependencies": {
+          "meson": "*",
+          "ninja": "*"
+        },
+        "buildsInSource": true,
+        "build": [
+          "python #{ meson.root / 'meson.py'} setup --prefix #{self.install} _builddir"
+        ],
+        "install": [
+          "#{ninja.root / 'ninja' } -C _builddir",
+          "python #{ meson.root / 'meson.py'} install -C _builddir"
+        ]
+      }
+    },
+    "pkg-config": {
+      "source": "https://pkg-config.freedesktop.org/releases/pkg-config-0.29.tar.gz#f4b19d203b3896a4293af4b62c7f908063c88a5a",
+      "override": {
+        "buildsInSource": true,
+        "build": [
+          "./configure --prefix #{self.install}",
+          "make"
+        ],
+        "install": [
+          "make install"
+        ]
+      }
+    }
+  }
+}
